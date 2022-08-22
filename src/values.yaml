@@ -1,0 +1,159 @@
+# Default values for et-service.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+maxSurge: 100%
+maxUnavailable: 0
+
+namespace:
+  name: "overops-snapshot"
+
+image:
+  repository: us.gcr.io/overops-play/overops/et-service
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "5.2.3-SNAPSHOT-309"
+
+# image:
+#   repository: harness/et-service-signed
+#   pullPolicy: IfNotPresent
+#   # Overrides the image tag whose default is the chart appVersion.
+#   tag: "ubi"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+initContainers:
+  postgresql:
+    image:
+      tag: 11.10.0-debian-10-r24
+      repository: bitnami/postgresql
+  check:
+    image:
+      tag: 1.33.1
+      repository: busybox
+
+postgresql:
+  enabled: 
+  postgresqlUsername: 
+  hostname:
+
+et:
+  logLevel: INFO
+  hostname: error-tracking-svc
+
+  redis:
+    enabled: true
+    host: redis-gcp
+    port: 6379
+    trimCronExpression: "@hourly"
+    streamLength: 1000
+
+  hikari:
+    maximumPoolSize: 50
+    connectionTimeout: 60000
+
+livenessProbe:
+  enabled: true
+  periodSeconds: 10
+  initialDelaySeconds: 60
+  failureThreshold: 3
+  successThreshold: 1
+  timeoutSeconds: 1
+
+startupProbe:
+  enabled: true
+  initialDelaySeconds: 80
+  periodSeconds: 10
+  failureThreshold: 10
+  successThreshold: 1
+  timeoutSeconds: 1
+
+readinessProbe:
+  enabled: true
+  initialDelaySeconds: 60
+  periodSeconds: 5
+  failureThreshold: 3
+  successThreshold: 1
+  timeoutSeconds: 1
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 9191
+
+ingress:
+  enabled: false
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: error-tracking-svc
+      paths:
+      - path: /
+        backend:
+          serviceName: error-tracking-svc
+          servicePort: 9191
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+resources: 
+  limits:
+    cpu: 4
+    memory: 8Gi
+  requests:
+    cpu: 100m
+    memory: 8Gi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+env:
+  config:
+    HOST_URL: error-tracking-svc
+    FRONTEND_URL: https://error-tracking-svc/gateway/et
+    DB_TYPE: mysql
+    DB_URL: "mysql-gcp:3306"
+    APP_ACL_URL: https://error-tracking-svc/gateway/authz/api
+    HEAPDUMP_ON_OOM: false
+    JVM_HEAPSIZE: "6400m"
+  secrets:
+    DB_USER: "overops"
+    DBA_USER: "overops"
+    APP_TOKEN_JWT_SECRET: ""
+    
