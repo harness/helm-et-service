@@ -10,10 +10,11 @@ namespace:
   name: "overops-snapshot"
 
 image:
-  repository: us.gcr.io/overops-play/overops/et-service
+  registry: us.gcr.io
+  repository: overops-play/overops/et-service
   pullPolicy: IfNotPresent
-  # Overrides the image tag whose default is the chart appVersion.
   tag: "5.2.3-SNAPSHOT-309"
+  digest: ""
 
 # image:
 #   repository: harness/et-service-signed
@@ -24,6 +25,14 @@ image:
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
+
+waitForInitContainer:
+  image:
+    registry: docker.io
+    repository: harness/helm-init-container
+    pullPolicy: IfNotPresent
+    tag: "latest"
+    digest: ""
 
 initContainers:
   postgresql:
