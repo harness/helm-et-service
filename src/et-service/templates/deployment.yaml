@@ -61,7 +61,7 @@ spec:
           {{- end}}
 
           # This is a temporary way to pass the db passwords
-          env: 
+          env:
           - name: DB_PASS
             valueFrom:
               secretKeyRef:
@@ -72,7 +72,7 @@ spec:
               secretKeyRef:
                 name: overops-secret
                 key: db-password
-        
+
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
