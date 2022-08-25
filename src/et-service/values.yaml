@@ -17,10 +17,11 @@ image:
   digest: ""
 
 # image:
-#   repository: harness/et-service-signed
+#   repository: us.gcr.io/platform-205701/harness/release-et-service-ubi
+#   #repository: harness/et-service-signed # dockerhub
 #   pullPolicy: IfNotPresent
 #   # Overrides the image tag whose default is the chart appVersion.
-#   tag: "ubi"
+#   tag: "5.2.3-SNAPSHOT-16"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -120,11 +121,11 @@ ingress:
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   hosts:
-    - host: error-tracking-svc
+    - host: et-service
       paths:
       - path: /
         backend:
-          serviceName: error-tracking-svc
+          serviceName: et-service
           servicePort: 9191
   tls: []
   #  - secretName: chart-example-tls
@@ -154,11 +155,11 @@ affinity: {}
 
 env:
   config:
-    HOST_URL: error-tracking-svc
-    FRONTEND_URL: https://error-tracking-svc/gateway/et
+    HOST_URL: et-service
+    FRONTEND_URL: https://et-service/gateway/et
     DB_TYPE: mysql
     DB_URL: "mysql-gcp:3306"
-    APP_ACL_URL: https://error-tracking-svc/gateway/authz/api
+    APP_ACL_URL: https://et-service/gateway/authz/api
     HEAPDUMP_ON_OOM: false
     JVM_HEAPSIZE: "6400m"
   secrets:
