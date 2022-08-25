@@ -1,6 +1,6 @@
 apiVersion: v2
 name: et-service
-description: A Helm chart for Harness ET Service 
+description: A Helm chart for Harness ET Service
 
 # A chart can be either an 'application' or a 'library' chart.
 #
