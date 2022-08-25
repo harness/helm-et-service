@@ -6,7 +6,7 @@ replicaCount: 1
 maxSurge: 100%
 maxUnavailable: 0
 
-namespace:
+namespace:   
   name: "overops-snapshot"
 
 image:
