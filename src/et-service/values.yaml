@@ -51,7 +51,7 @@ postgresql:
 
 et:
   logLevel: INFO
-  hostname: error-tracking-svc
+  hostname: et-service
 
   redis:
     enabled: true
@@ -120,11 +120,11 @@ ingress:
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   hosts:
-    - host: error-tracking-svc
+    - host: et-service
       paths:
       - path: /
         backend:
-          serviceName: error-tracking-svc
+          serviceName: et-service
           servicePort: 9191
   tls: []
   #  - secretName: chart-example-tls
@@ -132,9 +132,6 @@ ingress:
   #      - chart-example.local
 
 resources:
-  limits:
-    cpu: 4
-    memory: 8Gi
   requests:
     cpu: 100m
     memory: 8Gi
@@ -154,11 +151,11 @@ affinity: {}
 
 env:
   config:
-    HOST_URL: error-tracking-svc
-    FRONTEND_URL: https://error-tracking-svc/gateway/et
-    DB_TYPE: mysql
-    DB_URL: "mysql-gcp:3306"
-    APP_ACL_URL: https://error-tracking-svc/gateway/authz/api
+    HOST_URL: et-service
+    FRONTEND_URL: https://et-service/gateway/et
+    DB_TYPE: postgresql
+    DB_URL: "postgresql:5432"
+    APP_ACL_URL: https://et-service/gateway/authz/api
     HEAPDUMP_ON_OOM: false
     JVM_HEAPSIZE: "6400m"
   secrets:
