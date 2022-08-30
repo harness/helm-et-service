@@ -39,10 +39,6 @@ spec:
 #        args:
 #          - "pod"
 #          - "-lapp=postgres"
-      - name: check-for-mysql
-        image: {{ .Values.initContainers.check.image.repository}}:{{.Values.initContainers.check.image.tag}}
-        command: ["sh","-c"]
-        args: ['while ! nc -z mysql-gcp:3306 2>/dev/null; do let elapsed=elapsed+1; if [ "$elapsed" -gt 90 ]; then echo "waiting"; exit 1; fi; sleep 1; done; echo "mysql is ready" ']
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
@@ -128,8 +124,10 @@ spec:
             items:
               - key: application.properties
                 path: application.properties
-              - key: application-mysql.properties
-                path: application-mysql.properties
+              {{- if eq .Values.env.config.DB_TYPE "postgresql" }}
+              - key: application-postgresql.properties
+                path: application-postgresql.properties
+              {{- end }}
               - key: my.server.properties
                 path: my.server.properties
               - key: data-migration.properties
