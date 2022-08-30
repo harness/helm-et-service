@@ -1,1 +1,1 @@
-#Helm chart for et-service
+src/et-service/README.md
