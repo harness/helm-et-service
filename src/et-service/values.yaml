@@ -17,10 +17,11 @@ image:
   digest: ""
 
 # image:
+#   repository: docker.io
 #   repository: harness/et-service-signed
 #   pullPolicy: IfNotPresent
-#   # Overrides the image tag whose default is the chart appVersion.
-#   tag: "ubi"
+#   tag: "5.2.3"
+#   digest: ""
 
 imagePullSecrets: []
 nameOverride: ""
