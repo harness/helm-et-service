@@ -13,7 +13,7 @@ image:
   registry: us.gcr.io
   repository: overops-play/overops/et-service
   pullPolicy: IfNotPresent
-  tag: "5.2.3-SNAPSHOT-309"
+  tag: "5.2.3-SNAPSHOT-315"
   digest: ""
 
 # image:
@@ -155,7 +155,7 @@ env:
     HOST_URL: et-service
     FRONTEND_URL: https://et-service/gateway/et
     DB_TYPE: postgresql
-    DB_URL: "postgresql:5432"
+    DB_URL: "et-db-postgresql:5432"
     APP_ACL_URL: https://et-service/gateway/authz/api
     HEAPDUMP_ON_OOM: false
     JVM_HEAPSIZE: "6400m"
