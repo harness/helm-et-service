@@ -1,4 +1,6 @@
 fail_fast: false
+default_language_version:
+    python: python3.8
 
 repos:
 - repo: https://github.com/pre-commit/pre-commit-hooks
@@ -10,3 +12,7 @@ repos:
   rev: v0.1.17
   hooks:
   - id: helmlint
+- repo: https://github.com/norwoodj/helm-docs
+  rev: v1.11.0
+  hooks:
+  - id: helm-docs
