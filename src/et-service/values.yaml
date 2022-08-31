@@ -43,6 +43,11 @@ postgresql:
   postgresqlUsername:
   hostname:
 
+# Postgres secret value and key
+postgresPassword:
+  name: postgres
+  key: postgres-password
+
 et:
   logLevel: INFO
   hostname: et-service
