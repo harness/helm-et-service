@@ -157,7 +157,3 @@ env:
     APP_ACL_URL: https://et-service/gateway/authz/api
     HEAPDUMP_ON_OOM: false
     JVM_HEAPSIZE: "6400m"
-  secrets:
-    DB_USER: "overops"
-    DBA_USER: "overops"
-    APP_TOKEN_JWT_SECRET: ""
