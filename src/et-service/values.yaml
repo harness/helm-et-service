@@ -41,8 +41,8 @@ et:
   hostname: et-service
 
   redis:
-    enabled: true
-    host: redis-gcp
+    enabled: false
+    host:
     port: 6379
     trimCronExpression: "@hourly"
     streamLength: 1000
