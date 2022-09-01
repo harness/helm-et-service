@@ -157,3 +157,4 @@ env:
     APP_ACL_URL: https://et-service/gateway/authz/api
     HEAPDUMP_ON_OOM: false
     JVM_HEAPSIZE: "6400m"
+    DB_USER: postgres
