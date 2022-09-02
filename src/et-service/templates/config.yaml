@@ -1,62 +1,67 @@
-{{- if .Values.env.config}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "et-service.fullname" . }}
+  name: et-service-env
   namespace: {{ .Release.Namespace }}
 data:
-  {{- range $key, $val := .Values.env.config }}
-  {{ $key }}: {{ $val | quote }}
-  {{- end }}
-{{- end}}
+  APP_TOKEN_JWT_SECRET: HVSKUYqD4e5Rxu12hFDdCJKGM64sxgEynvdDhaOHaTHhwwn0K4Ttr0uoOxSsEVYNrUU=
+  HOST_URL: et-service
+  APP_ACL_URL: '{{ .Values.global.loadbalancerURL }}/authz/api/'
+  JVM_HEAPSIZE: {{ .Values.et.java.heapSize }}
+  HEAPDUMP_ON_OOM: {{ .Values.et.java.enableHeapDump }}
+  DB_USER: postgres
+  DB_URL: postgres:5432
 
 ---
 
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "et-service.fullname" . }}-config
+  name: et-service-config
   namespace: {{ .Release.Namespace }}
 data:
   application.properties: |-
     logging.level.root={{ .Values.et.logLevel }}
     {{- if .Values.et.redis.enabled }}
-    spring.profiles.active={{ .Values.env.config.DB_TYPE }},msg_redis,service_stats
+    spring.profiles.active=postgresql,msg_redis,service_stats
     redis.consumer.group=backend
     {{- else }}
-    spring.profiles.active={{ .Values.env.config.DB_TYPE }},msg_inline
+    spring.profiles.active=postgresql,msg_inline
     {{- end }}
     jwt.secretKey=${APP_TOKEN_JWT_SECRET}
-    harness.api.gateway={{ .Values.et.gatewayURL }}
+    harness.api.gateway={{ .Values.global.loadbalancerURL }}/gateway
 
-  {{- if eq .Values.env.config.DB_TYPE "postgresql" }}
   application-postgresql.properties: |-
-    spring.datasource.url=jdbc:postgresql://{{ .Values.env.config.DB_URL }}/overops?useLegacyDatetimeCode=false&rewriteBatchedStatements=true
+    spring.datasource.url=jdbc:postgresql://${DB_URL}/overops?useLegacyDatetimeCode=false&rewriteBatchedStatements=true
     spring.datasource.username=${DB_USER}
     spring.datasource.password=${DB_PASS}
 
     spring.datasource.hikari.auto-commit=false
     spring.datasource.hikari.maximumPoolSize={{ .Values.et.hikari.maximumPoolSize }}
     spring.datasource.hikari.connectionTimeout={{ .Values.et.hikari.connectionTimeout }}
-  {{- end }}
 
   my.server.properties: |-
-    FRONTEND_HOST={{ .Values.env.config.FRONTEND_URL }}
+    FRONTEND_HOST={{ .Values.global.loadbalancerURL }}/et
 
   data-migration.properties: |-
     spring.data.jpa.repositories.enabled=false
-    spring.profiles.active={{ .Values.env.config.DB_TYPE }}
-    spring.datasource.url=jdbc:{{ .Values.env.config.DB_TYPE }}://{{ .Values.env.config.DB_URL }}/overops?useLegacyDatetimeCode=false&rewriteBatchedStatements=true
+    spring.profiles.active=postgresql
+    spring.datasource.url=jdbc:postgresql://${DB_URL}/overops?useLegacyDatetimeCode=false&rewriteBatchedStatements=true
     spring.datasource.username=${DBA_USER}
     spring.datasource.password=${DBA_PASS}
-    spring.liquibase.change-log=classpath:/db/changelog/{{ .Values.env.config.DB_TYPE }}/db.changelog-master.xml
+    spring.liquibase.change-log=classpath:/db/changelog/postgresql/db.changelog-master.xml
 
   {{- if .Values.et.redis.enabled }}
   application-msg_redis.properties: |-
     spring.cache.type=redis
     spring.cache.redis.enable-statistics=true
+    {{- if .Values.et.redis.useSentinel }}
+    spring.redis.sentinel.master=harness-redis
+    spring.redis.sentinel.nodes=redis://redis-sentinel-harness-announce-0.{{ .Release.Namespace  }}:26379,redis://redis-sentinel-harness-announce-1.{{ .Release.Namespace  }}:26379,redis://redis-sentinel-harness-announce-2.{{ .Release.Namespace  }}:26379
+    {{- else }}
     spring.redis.host={{ .Values.et.redis.host }}
     spring.redis.port={{ .Values.et.redis.port }}
+    {{- end }}
     management.health.redis.enabled=true
     redis.stream.trimCronExpression={{ .Values.et.redis.trimCronExpression }}
     redis.stream.streamLength={{ .Values.et.redis.streamLength }}
