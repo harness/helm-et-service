@@ -47,8 +47,8 @@ data:
     spring.data.jpa.repositories.enabled=false
     spring.profiles.active=postgresql
     spring.datasource.url=jdbc:postgresql://${DB_URL}/overops?useLegacyDatetimeCode=false&rewriteBatchedStatements=true
-    spring.datasource.username=${DBA_USER}
-    spring.datasource.password=${DBA_PASS}
+    spring.datasource.username=${DB_USER}
+    spring.datasource.password=${DB_PASS}
     spring.liquibase.change-log=classpath:/db/changelog/postgresql/db.changelog-master.xml
 
   {{- if .Values.et.redis.enabled }}
