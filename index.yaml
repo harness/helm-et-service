@@ -3,6 +3,23 @@ entries:
   et-service:
   - apiVersion: v2
     appVersion: 5.3.0
+    created: "2022-09-04T16:00:27.733996218Z"
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      version: 2.x.x
+    - name: harness-common
+      repository: https://harness.github.io/helm-common
+      version: 1.x.x
+    description: A Helm chart for Harness ET Service
+    digest: 7d956e3b7c7e6128b8d9bcc4ee5120d99811adb08c612abb98fe4604916d49e9
+    name: et-service
+    type: application
+    urls:
+    - https://github.com/harness/helm-et-service/releases/download/et-service-0.1.11/et-service-0.1.11.tgz
+    version: 0.1.11
+  - apiVersion: v2
+    appVersion: 5.3.0
     created: "2022-09-01T12:54:54.664792586Z"
     dependencies:
     - name: common
@@ -137,4 +154,4 @@ entries:
     urls:
     - https://github.com/harness/helm-et-service/releases/download/et-service-0.1.1/et-service-0.1.1.tgz
     version: 0.1.1
-generated: "2022-09-01T12:54:54.664961886Z"
+generated: "2022-09-04T16:00:27.734061723Z"
