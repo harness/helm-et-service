@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "et-service.fullname" . }}
+  name: et-service
   namespace: {{ .Release.Namespace }}
   labels:
     {{- include "et-service.labels" . | nindent 4 }}
@@ -51,11 +51,9 @@ spec:
               containerPort: 9191
               protocol: TCP
 
-          {{- if or .Values.env.config }}
           envFrom:
           - configMapRef:
-              name: {{ include "et-service.fullname" . }}
-          {{- end}}
+              name: et-service-env
 
           env:
           - name: DB_PASS
@@ -109,14 +107,12 @@ spec:
       volumes:
         - name: et-private
           configMap:
-            name: {{ include "et-service.fullname" . }}-config
+            name: et-service-config
             items:
               - key: application.properties
                 path: application.properties
-              {{- if eq .Values.env.config.DB_TYPE "postgresql" }}
               - key: application-postgresql.properties
                 path: application-postgresql.properties
-              {{- end }}
               - key: my.server.properties
                 path: my.server.properties
               - key: data-migration.properties
