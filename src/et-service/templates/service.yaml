@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "et-service.fullname" . }}
+  name: et-service
   namespace: {{ .Release.Namespace }}
   labels:
     {{- include "et-service.labels" . | nindent 4 }}

@@ -1,6 +1,8 @@
 # Default values for et-service.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
+global:
+  loadbalancerURL: "http://test/abc"
 
 replicaCount: 1
 maxSurge: 100%
@@ -26,11 +28,6 @@ waitForInitContainer:
     tag: "latest"
     digest: ""
 
-# postgresql:
-#   enabled:
-#   postgresqlUsername:
-#   hostname:
-
 # Postgres secret value and key
 postgresPassword:
   name: postgres
@@ -38,14 +35,18 @@ postgresPassword:
 
 et:
   logLevel: INFO
-  hostname: et-service
+
+  java:
+    enableHeapDump: false
+    heapSize: "6400m"
 
   redis:
-    enabled: false
+    enabled: true
     host:
     port: 6379
     trimCronExpression: "@hourly"
     streamLength: 1000
+    useSentinel: true
 
   hikari:
     maximumPoolSize: 50
@@ -147,14 +148,3 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
-
-env:
-  config:
-    HOST_URL: et-service
-    FRONTEND_URL: https://et-service/gateway/et
-    DB_TYPE: postgresql
-    DB_URL: "postgresql:5432"
-    APP_ACL_URL: https://et-service/gateway/authz/api
-    HEAPDUMP_ON_OOM: false
-    JVM_HEAPSIZE: "6400m"
-    DB_USER: postgres
