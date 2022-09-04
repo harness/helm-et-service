@@ -4,13 +4,13 @@ metadata:
   name: et-service-env
   namespace: {{ .Release.Namespace }}
 data:
-  APP_TOKEN_JWT_SECRET: HVSKUYqD4e5Rxu12hFDdCJKGM64sxgEynvdDhaOHaTHhwwn0K4Ttr0uoOxSsEVYNrUU=
-  HOST_URL: et-service
-  APP_ACL_URL: '{{ .Values.global.loadbalancerURL }}/authz/api/'
-  JVM_HEAPSIZE: {{ .Values.et.java.heapSize }}
-  HEAPDUMP_ON_OOM: {{ .Values.et.java.enableHeapDump }}
-  DB_USER: postgres
-  DB_URL: postgres:5432
+  APP_TOKEN_JWT_SECRET: "HVSKUYqD4e5Rxu12hFDdCJKGM64sxgEynvdDhaOHaTHhwwn0K4Ttr0uoOxSsEVYNrUU="
+  HOST_URL: "et-service"
+  APP_ACL_URL: "{{ .Values.global.loadbalancerURL }}/authz/api/"
+  JVM_HEAPSIZE: "{{ .Values.et.java.heapSize }}"
+  HEAPDUMP_ON_OOM: "{{ .Values.et.java.enableHeapDump }}"
+  DB_USER: "postgres"
+  DB_URL: "postgres:5432"
 
 ---
 
