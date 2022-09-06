@@ -49,7 +49,7 @@ et:
     useSentinel: true
 
   hikari:
-    maximumPoolSize: 50
+    maximumPoolSize: 10
     connectionTimeout: 60000
 
 livenessProbe:
