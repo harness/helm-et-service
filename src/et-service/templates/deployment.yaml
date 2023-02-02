@@ -24,6 +24,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
+        app: et-service
         {{- include "et-service.selectorLabels" . | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
@@ -40,6 +41,14 @@ spec:
         args:
           - "pod"
           - "-lapp=postgres"
+      {{- if .Values.et.redis.enabled }}
+      - name: wait-for-redis
+        image: {{ include "common.images.image" (dict "imageRoot" .Values.waitForInitContainer.image "global" .Values.global) }}
+        imagePullPolicy: IfNotPresent
+        args:
+          - "pod"
+          - "-lapp=redis-sentinel"
+      {{- end }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
