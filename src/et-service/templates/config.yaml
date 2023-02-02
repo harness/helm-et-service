@@ -22,6 +22,12 @@ metadata:
 data:
   application.properties: |-
     logging.level.root={{ .Values.et.logLevel }}
+    {{- if .Values.et.dataRetention.verbose }}
+    logging.level.com.overops.dataretention=DEBUG
+    {{- end }}
+    harness.dataretention.days={{ .Values.et.dataRetention.days }}
+    harness.dataretention.schedule={{ .Values.et.dataRetention.schedule }}
+    harness.dataretention.batchsize={{ .Values.et.dataRetention.batchSize }}
     {{- if .Values.et.redis.enabled }}
     spring.profiles.active=postgresql,msg_redis,service_stats
     redis.consumer.group=backend
