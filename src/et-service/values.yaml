@@ -47,6 +47,12 @@ et:
     trimCronExpression: "@hourly"
     streamLength: 1000
     useSentinel: true
+  
+  dataRetention:
+    verbose: true
+    days: 90
+    schedule: "0 0 2 * * *"
+    batchSize: 1000
 
   hikari:
     maximumPoolSize: 10
